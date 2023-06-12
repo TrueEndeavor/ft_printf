@@ -5,9 +5,10 @@
 # include <stdarg.h>
 # include "./libft/libft.h"
 
-# define BASE_DEC "0123456789"
-# define BASE_HEX_LOWER "0123456789abcdef"
-# define BASE_HEX_UPPER "0123456789ABCDEF"
+# define STD_OUT 1
+# define BASE_HEX 16
+# define UPPER 1
+# define LOWER 0
 
 int ft_printf(const char *format, ...);
 
