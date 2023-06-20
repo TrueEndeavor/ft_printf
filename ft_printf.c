@@ -1,93 +1,70 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lannur-s <lannur-s@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/13 18:03:58 by lannur-s          #+#    #+#             */
+/*   Updated: 2023/06/20 13:45:50 by lannur-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-static int ft_num_digits_base(unsigned long number, int base)
+static int	print_p(unsigned long adr)
 {
-    int num_digits = 1;
-
-    while ((int) number >= base)
-    {
-        number /= base;
-        num_digits++;
-    }
-
-    return num_digits;
+	if (adr)
+	{
+		print_string("0x");
+		return (print_pointer(adr, BASE_HEX, LOWER) + 2);
+	}
+	return (print_string(NIL_STRING));
 }
 
-static void add_leading_zeros(unsigned long address)
+static int	do_print(const char c, va_list args)
 {
-    int leading_zeros;
-
-    leading_zeros = sizeof(address) * 2 - ft_num_digits_base(address, BASE_HEX);
-    while (leading_zeros > 0)
-    {
-        ft_putchar_fd('0', STD_OUT);
-        leading_zeros--;
-    }
-}
-static int do_print(const char *format, void *arg)
-{
-    char            c;
-    unsigned long   address;
-
-    while ((c = *format) != '\0') 
-    {
-	    if (c == '%') 
-		    ft_putchar_fd(c, STD_OUT);
-        else if (c == 'c')
-            ft_putchar_fd((int)arg, STD_OUT);
-        else if (c == 's')
-            ft_putstr_fd((char *)arg, STD_OUT);
-        else if (c == 'd')
-            ft_putnbr_fd((int)arg, STD_OUT);
-        else if (c == 'u')
-            ft_putunsignednbr_fd((unsigned int)arg, STD_OUT);
-        else if (c == 'x')
-            ft_putnbr_base_fd((unsigned int)arg, STD_OUT, BASE_HEX, LOWER);
-        else if (c == 'X')
-            ft_putnbr_base_fd((unsigned int)arg, STD_OUT, BASE_HEX, UPPER);                               
-        else if (c == 'p')
-        {
-            address = (unsigned long)arg;
-            add_leading_zeros(address);
-            ft_putnbr_base_fd((unsigned long)arg, STD_OUT, BASE_HEX, UPPER);
-        }
-        format++;
-    }
-    return (1);
+	if (c == 'c')
+		return (print_char(va_arg(args, int)));
+	else if (c == 's')
+		return (print_string(va_arg(args, char *)));
+	else if (c == 'd' || c == 'i')
+		return (print_nbr(va_arg(args, int)));
+	else if (c == 'u')
+		return (print_unsigned_nbr(va_arg(args, unsigned int)));
+	else if (c == 'x')
+		return (print_hexa(va_arg(args, unsigned int), BASE_HEX, LOWER));
+	else if (c == 'X')
+		return (print_hexa(va_arg(args, unsigned int), BASE_HEX, UPPER));
+	else if (c == 'p')
+		return (print_p(va_arg(args, unsigned long)));
+	else if (c == '%')
+		return (ft_putchar_fd('%', STD_OUT), 1);
+	else
+		return (-1);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
-    va_list args;
-    
-    va_start(args, format);
-    while (*format != '\0')
-    {
-        if (*format == '%')
+	va_list	args;
+	int		length;
+
+	length = 0;
+	va_start(args, format);
+	while (*format != '\0')
+	{
+		if (*format == '%' && ft_strchr("csdiuxXp%", *(format + 1)) != 0)
 		{
-            format++;
-            if (ft_strchr("cspdiuxX",*format ))
-                do_print(format, va_arg(args, void *));
-            else if(*format == '%')
-                ft_putchar_fd('%', STD_OUT);
-        }
-        else
-            ft_putchar_fd(*format, STD_OUT);
-        format++;
-    }
-    
-    va_end(args);
-    return (1);
-}
-
-int main(void)
-{
-    //printf("%d", 1+3);
-    char *p;
-    p = "rrrrrrrrrrrr";
-    printf("%d\n",sizeof(p)*2);
-    printf(">>%p\n", p);    
-     ft_printf(">>%p\n", p);
-
-    return 0;
+			format++;
+			length += do_print(*format, args);
+		}
+		else
+		{
+			ft_putchar_fd(*format, STD_OUT);
+			length++;
+		}
+		format++;
+	}
+	va_end(args);
+	return (length);
 }

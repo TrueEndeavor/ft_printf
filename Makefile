@@ -1,44 +1,54 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lannur-s <lannur-s@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/06/13 19:12:46 by lannur-s          #+#    #+#              #
+#    Updated: 2023/06/20 11:48:23 by lannur-s         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 NAME = libftprintf.a
 LIBFTNAME = libft.a
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Werror -Wextra
 
 AR = ar
 ARFLAGS = rcs
 
-LIBFTDIR = .\libft
+LIBFDIR = ./libft
 
-SRCS = ft_printf.c 
-OBJS = $(SRCS:%.c=%.o)
+SRC = ft_printf.c print_char.c print_string.c print_nbr.c \
+		print_unsigned_nbr.c print_hexa.c print_pointer.c
+
+OBJ = $(SRC:%.c=%.o)
 
 %.o: %.c
+	@echo Compiling $<
 	$(CC) $(CFLAGS) -c $< -o $@
+	
 
-
-$(NAME): makelibft $(OBJS)
-	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
-
+$(NAME): $(OBJ) makelibft
+	$(AR) $(ARFLAGS) $(NAME) $(OBJ)
+	
 makelibft:
-	make -C $(LIBFTDIR)
-	copy $(LIBFTDIR)\$(LIBFTNAME) $(LIBFTNAME)
-	move $(LIBFTNAME) $(NAME)
-
-
-
-
+	make -C $(LIBFDIR)
+	cp $(LIBFDIR)/$(LIBFTNAME) $(LIBFTNAME)
+	mv $(LIBFTNAME) $(NAME)
+	
 all: $(NAME)
 
-clean: 
-	del -f $(OBJS)
-	cd $(LIBFTDIR) && make clean
+clean:
+	rm -f $(OBJ)
+	cd $(LIBFDIR) && make clean
 
-fclean :
-	del -f $(NAME)
-	cd $(LIBFTDIR) && make fclean
-
+fclean:
+	rm -f $(NAME)
+	cd $(LIBFDIR) && make fclean
+	
 re: fclean all
 
-.PHONY: all clean fclean makelibft
-
+.PHONY: all clean fclean makelibft 
