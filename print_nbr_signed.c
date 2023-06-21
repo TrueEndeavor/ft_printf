@@ -1,34 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_hexa.c                                       :+:      :+:    :+:   */
+/*   print_nbr_signed.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lannur-s <lannur-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/15 14:34:57 by lannur-s          #+#    #+#             */
-/*   Updated: 2023/06/20 11:46:48 by lannur-s         ###   ########.fr       */
+/*   Created: 2023/06/15 13:58:04 by lannur-s          #+#    #+#             */
+/*   Updated: 2023/06/21 13:07:20 by lannur-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_hexa(unsigned int nbr, int base, int uppercase)
+int	print_nbr_signed(int n)
 {
-	int				length;
+	int	len;
+	int	adjustment;
 
-	length = 0;
-	if (nbr >= (unsigned int) base)
-		length += print_hexa(nbr / base, base, uppercase);
-
-	if (nbr % base >= 10)
+	len = 0;
+	adjustment = 0;
+	if (n == INT_MIN)
 	{
-		if (uppercase == UPPER)
-			ft_putchar_fd(((nbr % base) - 10) + 'A', STD_OUT);
-		else
-			ft_putchar_fd(((nbr % base) - 10) + 'a', STD_OUT);
+		n += 1;
+		adjustment = 1;
 	}
-	else
-		ft_putchar_fd((nbr % base) + '0', STD_OUT);
-	length++;
-	return (length);
+	if (n < 0)
+	{
+		ft_putchar_fd('-', STD_OUT);
+		n = -n;
+		len++;
+	}
+	if (n >= 10)
+		len += print_nbr_signed(n / 10);
+	ft_putchar_fd(n % 10 + adjustment + '0', STD_OUT);
+	len++;
+	return (len);
 }

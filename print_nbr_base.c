@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_pointer.c                                    :+:      :+:    :+:   */
+/*   print_nbr_base.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lannur-s <lannur-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 14:34:57 by lannur-s          #+#    #+#             */
-/*   Updated: 2023/06/20 12:24:34 by lannur-s         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:07:43 by lannur-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_pointer(unsigned long nbr, int base, int uppercase)
+int	print_nbr_base(unsigned long long nbr, int base, int uppercase)
 {
 	int				length;
 
 	length = 0;
 	if (nbr >= (unsigned int) base)
-		length += print_pointer(nbr / base, base, uppercase);
-
+		length += print_nbr_base(nbr / base, base, uppercase);
 	if (nbr % base >= 10)
 	{
 		if (uppercase == UPPER)

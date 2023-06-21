@@ -6,7 +6,7 @@
 /*   By: lannur-s <lannur-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 18:04:15 by lannur-s          #+#    #+#             */
-/*   Updated: 2023/06/20 13:42:00 by lannur-s         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:05:42 by lannur-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # define STD_OUT 1
 # define BASE_HEX 16
+# define BASE_DEC 10
 # define UPPER 1
 # define LOWER 0
 # define NULL_STRING "(null)"
@@ -29,9 +30,7 @@
 int		ft_printf(const char *format, ...);
 int		print_char(char c);
 int		print_string(char *s);
-int		print_nbr(int n);
-int		print_unsigned_nbr(unsigned int un);
-int		print_hexa(unsigned int n, int base, int uppercase);
-int		print_pointer(unsigned long nbr, int base, int uppercase);
+int		print_nbr_signed(int n);
+int		print_nbr_base(unsigned long long n, int base, int uppercase);
 
 #endif

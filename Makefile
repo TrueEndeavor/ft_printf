@@ -6,7 +6,7 @@
 #    By: lannur-s <lannur-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/13 19:12:46 by lannur-s          #+#    #+#              #
-#    Updated: 2023/06/20 11:48:23 by lannur-s         ###   ########.fr        #
+#    Updated: 2023/06/21 17:10:06 by lannur-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,34 +21,33 @@ ARFLAGS = rcs
 
 LIBFDIR = ./libft
 
-SRC = ft_printf.c print_char.c print_string.c print_nbr.c \
-		print_unsigned_nbr.c print_hexa.c print_pointer.c
+SRCS =	ft_printf.c \
+		print_char.c print_string.c \
+		print_nbr_signed.c print_nbr_base.c 
 
-OBJ = $(SRC:%.c=%.o)
+OBJS = $(SRCS:%.c=%.o)
 
-%.o: %.c
-	@echo Compiling $<
-	$(CC) $(CFLAGS) -c $< -o $@
-	
+$(NAME): $(OBJS) $(LIBFDIR)/$(LIBFTNAME)
+	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 
-$(NAME): $(OBJ) makelibft
-	$(AR) $(ARFLAGS) $(NAME) $(OBJ)
-	
-makelibft:
+$(LIBFDIR)/$(LIBFTNAME):
 	make -C $(LIBFDIR)
 	cp $(LIBFDIR)/$(LIBFTNAME) $(LIBFTNAME)
-	mv $(LIBFTNAME) $(NAME)
-	
+	mv $(LIBFTNAME) $(NAME)	
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 all: $(NAME)
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJS)
 	cd $(LIBFDIR) && make clean
 
-fclean:
+fclean: clean
 	rm -f $(NAME)
 	cd $(LIBFDIR) && make fclean
 	
 re: fclean all
 
-.PHONY: all clean fclean makelibft 
+.PHONY: all clean fclean
