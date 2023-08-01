@@ -6,7 +6,7 @@
 #    By: lannur-s <lannur-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/02 12:46:34 by lannur-s          #+#    #+#              #
-#    Updated: 2023/06/15 16:33:28 by lannur-s         ###   ########.fr        #
+#    Updated: 2023/06/22 11:46:49 by lannur-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ $(NAME): $(OBJS)
 # the source file ($<) and produce the object file ($@)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+	
 # Target rule: all
 # Builds the default target $(NAME) by invoking the target $(NAME)
 all: $(NAME)
